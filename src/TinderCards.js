@@ -1,22 +1,20 @@
 import { SwipeableDrawer } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
 import "./Tindercards.css";
+import instance from "./axios";
 
 function TinderCards() {
-  const [people, setPeople] = useState([
-    {
-      name: "Tonny",
-      Age: "29",
-      url: "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.18169-9/14656260_1137275202992926_8084418600837470824_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=174925&_nc_ohc=HSAwCPQ0jrkAX9Bj_E0&_nc_ht=scontent-cdg2-1.xx&oh=8fd78832df5e476944513dfe4cac171a&oe=61A4B7B4",
-    },
+  const [people, setPeople] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const req = await instance.get("tinder/cards");
+      setPeople(req.data);
+    }
+    fetchData();
+  }, []);
 
-    {
-      name: "Ntambaazi",
-      Age: "31",
-      url: "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.18169-9/14656260_1137275202992926_8084418600837470824_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=174925&_nc_ohc=HSAwCPQ0jrkAX9Bj_E0&_nc_ht=scontent-cdg2-1.xx&oh=8fd78832df5e476944513dfe4cac171a&oe=61A4B7B4",
-    },
-  ]);
+  console.log(people);
 
   const swiped = (direction, nameToDelete) => {
     console.log("removing " + nameToDelete);
@@ -38,8 +36,8 @@ function TinderCards() {
             onCardLeftScreen={() => outOfFrame(person.name)}
           >
             <div
-              style={{ backgroundImage: `url(${person.url})` }}
-              className="cards"
+              style={{ backgroundImage: `url(${person.imgURL})` }}
+              className="card"
             >
               <h3>{person.name}</h3>
             </div>
